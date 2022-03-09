@@ -13,8 +13,6 @@
 //  A Matrix containing the activated output.
 Matrix forward_linear(const Matrix &matrix) {
   Matrix activated = matrix;
-  // TODO: Implement forward activation.
-  NOT_IMPLEMENTED();
   return activated;
 }
 
@@ -39,9 +37,14 @@ Matrix backward_linear(const Matrix &out, const Matrix &prev_grad) {
 //  A Matrix containing the activated output.
 Matrix forward_logistic(const Matrix &matrix) {
   Matrix activated = matrix;
-  // TODO: Implement forward activation.
-  // Hint: look at matrix.h, it might save you some typing.
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < matrix.rows; ++i)
+  {
+    for (size_t j = 0; j < matrix.cols; ++j)
+    {
+      activated(i,j) = 1 / (1 + exp(-activated(i, j)));
+    }
+  }
+
   return activated;
 }
 
@@ -66,8 +69,14 @@ Matrix backward_logistic(const Matrix &out, const Matrix &prev_grad) {
 //  A Matrix containing the activated output.
 Matrix forward_tanh(const Matrix &matrix) {
   Matrix activated = matrix;
-  // TODO: Implement forward activation.
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < matrix.rows; ++i)
+  {
+    for (size_t j = 0; j < matrix.cols; ++j)
+    {
+      activated(i,j) = tanh(activated(i, j));
+    }
+  }
+
   return activated;
 }
 
@@ -93,7 +102,14 @@ Matrix backward_tanh(const Matrix &out, const Matrix &prev_grad) {
 Matrix forward_relu(const Matrix &matrix) {
   // TODO: Implement forward activation.
   Matrix activated = matrix;
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < matrix.rows; ++i)
+  {
+    for (size_t j = 0; j < matrix.cols; ++j)
+    {
+      activated(i,j) = std::max(0., activated(i, j));
+    }
+  }
+
   return activated;
 }
 
@@ -118,8 +134,15 @@ Matrix backward_relu(const Matrix &out, const Matrix &prev_grad) {
 // Returns:
 Matrix forward_lrelu(const Matrix &matrix) {
   Matrix activated = matrix;
-  // TODO: Implement forward activation.
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < matrix.rows; ++i)
+  {
+    for (size_t j = 0; j < matrix.cols; ++j)
+    {
+      double x = activated(i,j);
+      activated(i,j) = x < 0 ? 0.01 * x : x;
+    }
+  }
+
   return activated;
 }
 
