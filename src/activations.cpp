@@ -167,17 +167,19 @@ Matrix backward_lrelu(const Matrix &out, const Matrix &prev_grad) {
 // Returns:
 Matrix forward_softmax(const Matrix &matrix) {
   Matrix activated = matrix;
-  double exp_sum = 0; //std::accumulate(matrix.begin(), matrix.end(), 0);
   for (size_t i = 0; i < matrix.rows; ++i)
   {
+    double exp_sum = 0;
     for (size_t j = 0; j < matrix.cols; ++j)
     {
       exp_sum += exp(matrix(i,j));
     }
+    for (size_t j = 0; j < matrix.cols; ++j)
+    {
+      activated(i,j) = exp(matrix(i,j)) / exp_sum;
+    }
   }
 
-  activated = matrix.exp() / exp_sum;
-  std::cout << activated(0,0) << std::endl;
   return activated;
 }
 
