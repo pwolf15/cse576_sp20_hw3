@@ -26,8 +26,6 @@ Matrix forward_linear(const Matrix &matrix) {
 Matrix backward_linear(const Matrix &out, const Matrix &prev_grad) {
   assert_same_size(prev_grad, out);
   Matrix grad = prev_grad;
-  // TODO: Implement activation backward pass.
-  NOT_IMPLEMENTED();
   return grad;
 }
 
@@ -58,8 +56,14 @@ Matrix forward_logistic(const Matrix &matrix) {
 Matrix backward_logistic(const Matrix &out, const Matrix &prev_grad) {
   assert_same_size(prev_grad, out);
   Matrix grad = prev_grad;
-  // TODO: Implement activation backward pass.
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < grad.rows; ++i)
+  {
+    for (size_t j = 0; j < grad.cols; ++j)
+    {
+      auto f_prime_x = out(i,j) * (1 - out(i,j));
+      grad(i,j) = prev_grad(i,j) * f_prime_x;
+    }
+  }
   return grad;
 }
 
@@ -90,8 +94,13 @@ Matrix forward_tanh(const Matrix &matrix) {
 Matrix backward_tanh(const Matrix &out, const Matrix &prev_grad) {
   assert_same_size(prev_grad, out);
   Matrix grad = prev_grad;
-  // TODO: Implement activation backward pass.
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < grad.rows; ++i)
+  {
+    for (size_t j = 0; j < grad.cols; ++j)
+    {
+      grad(i,j) = prev_grad(i,j) * (1 - pow(out(i,j), 2));
+    }
+  }
   return grad;
 }
 
@@ -123,8 +132,14 @@ Matrix forward_relu(const Matrix &matrix) {
 Matrix backward_relu(const Matrix &out, const Matrix &prev_grad) {
   assert_same_size(prev_grad, out);
   Matrix grad = prev_grad;
-  // TODO: Implement activation backward pass.
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < grad.rows; ++i)
+  {
+    for (size_t j = 0; j < grad.cols; ++j)
+    {
+      double f_prime_x = out(i,j) < 0 ? 0 : 1;
+      grad(i,j) = prev_grad(i,j) * f_prime_x;
+    }
+  }
   return grad;
 }
 
