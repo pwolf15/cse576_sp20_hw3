@@ -171,8 +171,14 @@ Matrix forward_lrelu(const Matrix &matrix) {
 Matrix backward_lrelu(const Matrix &out, const Matrix &prev_grad) {
   assert_same_size(prev_grad, out);
   Matrix grad = prev_grad;
-  // TODO: Implement activation backward pass.
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < grad.rows; ++i)
+  {
+    for (size_t j = 0; j < grad.cols; ++j)
+    {
+      double f_prime_x = out(i,j) < 0 ? 0.01 : 1;
+      grad(i,j) = prev_grad(i,j) * f_prime_x;
+    }
+  }
   return grad;
 }
 
@@ -233,9 +239,12 @@ Matrix backward_softmax(const Matrix &out, const Matrix &prev_grad) {
   for (int i = 0; i < out.rows; i++) {
     Matrix jacobian = softmax_jacobian(out.get_row(i));
     Matrix row_grad = prev_grad.get_row(i);
-    // TODO: Implement the softmax backward pass.
-    NOT_IMPLEMENTED();
-    // grad(i, j) = ...
+    std::cout << "Rows; " <<  jacobian.rows << std::endl;
+
+    for (size_t j = 0; j < out.cols; ++j)
+    {
+      grad(i,j) = row_grad(0,j) * jacobian(i,j);
+    }
   }
   return grad;
 }
