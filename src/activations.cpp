@@ -191,13 +191,18 @@ Matrix forward_softmax(const Matrix &matrix) {
   for (size_t i = 0; i < matrix.rows; ++i)
   {
     double exp_sum = 0;
+    double maxEl = -1;
     for (size_t j = 0; j < matrix.cols; ++j)
     {
-      exp_sum += exp(matrix(i,j));
+      maxEl = std::max(matrix(i,j), maxEl);
     }
     for (size_t j = 0; j < matrix.cols; ++j)
     {
-      activated(i,j) = exp(matrix(i,j)) / exp_sum;
+      exp_sum += exp(matrix(i,j) - maxEl);
+    }
+    for (size_t j = 0; j < matrix.cols; ++j)
+    {
+      activated(i,j) = exp(matrix(i,j) - maxEl) / exp_sum;
     }
   }
 
@@ -215,14 +220,16 @@ Matrix softmax_jacobian(const Matrix &out_row) {
   Matrix jacobian(out_row.cols, out_row.cols);
   // TODO: Implement the Jacobian matrix.
   // Do whatever you want here, but here's some structure to get you started.
-  for (int j = 0; j < out_row.cols; j++) {
-    for (int k = 0; k < out_row.cols; k++) {
-      double val = 0.0;
-      if (j == k)
+  for (int i = 0; i < out_row.cols; i++) {
+    for (int j = 0; j < out_row.cols; j++) {
+      if (i == j)
       {
-        val = out_row(0,j);
+        jacobian(i,j) = out_row(0,i) - pow(out_row(0,i), 2);
       }
-      jacobian(j, k) = val - out_row(0,j)*out_row(0,k);
+      else
+      {
+        jacobian(i,j) = -out_row(0,i)*out_row(0,j);
+      }
     }
   }
   assert(jacobian.rows == out_row.cols);
@@ -239,11 +246,19 @@ Matrix backward_softmax(const Matrix &out, const Matrix &prev_grad) {
   for (int i = 0; i < out.rows; i++) {
     Matrix jacobian = softmax_jacobian(out.get_row(i));
     Matrix row_grad = prev_grad.get_row(i);
-    std::cout << "Rows; " <<  jacobian.rows << std::endl;
-
+    if (i == 0)
+    {
+      std::cout << "Jacobian" << std::endl;
+      for (size_t k = 0; k < out.cols; ++k)
+      {
+        std::cout << jacobian(i,k) << "," << std::endl;
+      }
+    }
     for (size_t j = 0; j < out.cols; ++j)
     {
-      grad(i,j) = row_grad(0,j) * jacobian(i,j);
+      if (i == 0 && j == 0)
+       std::cout << prev_grad(i,j) << "," << jacobian(i,j) << std::endl;
+      grad(i,j) = prev_grad(i,j) * jacobian(i,j);
     }
   }
   return grad;
