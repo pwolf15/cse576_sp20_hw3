@@ -121,6 +121,8 @@ Notes on Softmax:
  - Use the Jacobian in `backward_softmax` to then compute the actual backward pass.
  - Here are some excellent notes: https://mattpetersen.github.io/softmax-with-cross-entropy
 
+https://e2eml.school/softmax.html
+
 Fill in the `Matrix backward_*(const Matrix& out, const Matrix& prev_grad)` functions in `src/activations.cpp` to multiply the elements of `prev_grad` by the correct gradient where `out` is the output of a layer. 
 
 ## 1.3 Layer Forward Propagation ##
