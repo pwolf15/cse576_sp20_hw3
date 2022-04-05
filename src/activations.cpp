@@ -249,7 +249,7 @@ Matrix backward_softmax(const Matrix &out, const Matrix &prev_grad) {
     for (size_t j = 0; j < out.cols; ++j)
     {
       grad(i,j) = 0; // prev_grad(i,j) * jacobian(i,j);
-      for (size_t k = 0; k < jacobian.rows; ++k)
+      for (size_t k = 0; k < out.cols; ++k)
       {
         grad(i,j) += prev_grad(i,k) * jacobian(j,k);
       }
