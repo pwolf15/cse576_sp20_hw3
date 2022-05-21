@@ -186,6 +186,7 @@ Matrix backward_lrelu(const Matrix &out, const Matrix &prev_grad) {
 // Parameters:
 //  Matrix &matrix: the input non-activated output of the layer.
 // Returns:
+// https://jamesmccaffrey.wordpress.com/2016/03/04/the-max-trick-when-computing-softmax/
 Matrix forward_softmax(const Matrix &matrix) {
   Matrix activated = matrix;
   for (size_t i = 0; i < matrix.rows; ++i)

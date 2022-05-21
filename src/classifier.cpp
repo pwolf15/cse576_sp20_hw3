@@ -31,7 +31,13 @@ void debug_print(const char *name, const Matrix &m, int max_rows = 2, int max_co
 Matrix forward_weights(const Layer &l, const Matrix &in) {
   Matrix output;
   // TODO: Multiply input by weights and return the result
-  NOT_IMPLEMENTED();
+  for (size_t i = 0; i < in.rows; ++i)
+  {
+    for (size_t j = 0; j < in.cols; ++j)
+    {
+      output(i,j) = in(i,j) * l.w(i,j);
+    }
+  }
 
   assert(output.rows == in.rows);
   assert(output.cols == l.w.cols);
