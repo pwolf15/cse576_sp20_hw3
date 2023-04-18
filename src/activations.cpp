@@ -192,18 +192,13 @@ Matrix forward_softmax(const Matrix &matrix) {
   for (size_t i = 0; i < matrix.rows; ++i)
   {
     double exp_sum = 0;
-    double maxEl = -1;
     for (size_t j = 0; j < matrix.cols; ++j)
     {
-      maxEl = std::max(matrix(i,j), maxEl);
+      exp_sum += exp(matrix(i,j));
     }
     for (size_t j = 0; j < matrix.cols; ++j)
     {
-      exp_sum += exp(matrix(i,j) - maxEl);
-    }
-    for (size_t j = 0; j < matrix.cols; ++j)
-    {
-      activated(i,j) = exp(matrix(i,j) - maxEl) / exp_sum;
+      activated(i,j) = exp(matrix(i,j)) / exp_sum;
     }
   }
 
